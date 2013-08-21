@@ -1,4 +1,4 @@
 foobar
 ======
 
-foo bar
+django foo bar

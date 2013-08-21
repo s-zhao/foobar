@@ -1,0 +1,14 @@
+use symbolic link to use default web resources or, place custom resources here.
+
+
+custom - files
+links - use default
+
+filename - no version etc
+    example use jquery.js instead of jquery.version.js
+    
+in templates/html, always do:
+    {appname}/static/{filename}
+so that templates can be further customized on need.
+
+    

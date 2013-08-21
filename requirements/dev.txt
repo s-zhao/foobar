@@ -1,0 +1,6 @@
+#Werkzeug required by django-extensions
+Werkzeug
+django-extensions
+django-debug-toolbar
+django-tastypie
+mimeparse

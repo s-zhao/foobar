@@ -1,0 +1,147 @@
+https://github.com/robhudson/django-debug-toolbar
+    debugsqlshell
+        - print generated sql
+        
+http://pydoc.net/Python/django-extensions/1.1.1/
+https://github.com/django-extensions/django-extensions
+
+django-extensions
+    python manage.py graph_models -a -o myapp_models.png
+    python manage.py show_urls
+    python manage.py print_settings
+    python manage-dev.py find_template portal/partials/edit.html
+    python manage-dev.py runscript apps.portal.scripts.atest
+        run the 'run' function defined in apps/portal/scripts/atest.py
+        
+    python manage.py runserver_plus
+                     shell_plus
+                     validate_templates
+                     
+                     
+                     browse source code utils/commands for more tools
+   
+function permission
+record ownership/permission chain
+    parent owner account can modify records owned by child accounts
+    
+record grouping
+    AccountX.
+        records-set-a
+        records-set-b
+    
+user
+group
+permission
+group permission
+ 
+ 
+    
+
+http://www.carmodelslist.com/
+
+    
+db
+    model-foo
+        reference
+            - code tables
+            global reference data - static code tables
+        
+        master
+            - business entities/transactional participants
+            
+            system master records, system settings, country, state
+            user, role, - entities/players participating transactions
+            change infrequently
+            
+        data
+            - produced from business transactions/activities
+            
+            dynamic, transactional data, like access log, clicks, raws, 
+            
+            models.py
+            validators.py
+                
+    api
+        self contained dataset
+        analog to lego building blocks/bricks
+    
+        - data access interfaces exposed and subjected to access control
+        inputs - kw arguments only
+        outputs - django || python dict objects
+        
+sys / runtime 
+    system and app module configuration/setup
+    authentication
+    app-context
+    
+    api-access rules
+        who can use what
+        (user, app-context, api) -> access
+        
+    data-access rules/filters
+        - general rules applicable to data read/write/create/delete/number of records/field filtering
+        data access rules
+        db.access.user
+        db.access.media
+        db.access.admin
+        db.access.supermin
+    
+        (user, app-context, api, datasets) -> datasets
+    
+libs
+    3rd python modules/tools
+    
+    generic and well defined app toolset for re-use
+    
+utils
+    system/app utils 
+    
+    aggregator/clinet instructed execution command set
+
+static
+    for overwrite
+    css
+        ...
+    js
+        libs
+    images
+    media
+    partial
+    
+    
+templates
+    for overwrite
+    
+mods - application modules/sub-app
+    foo
+        - application module foo
+        
+            - api
+                . created here (app specific api), or imported from db.api
+                
+                . subject to additional data access and api access/authorization control
+                 (can use the api, can work on the data associated with the api)
+            
+            - views
+                use api
+                (never directly hit db models)
+                
+            - static
+            - templates
+    
+    system
+    school    
+    media
+    atheletes
+        from athletes.models.import AthleteCode
+        static
+        templates
+        
+    main
+        .models
+        from main.models import Code
+        
+        
+        
+django - static/templates lookup
+        

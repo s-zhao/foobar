@@ -1,0 +1,37 @@
+<!doctype html>{% load staticfiles %}
+<html>
+<head>
+<title>{{ title|default:"foo bar" }}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block 'meta' %}{% endblock %}
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css">
+<link href="{% static 'css/bootstrap/bootstrap-glyphicons.css' %}" rel="stylesheet">
+
+<link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+<script src="{% static 'js/jquery/jquery-2.0.3.min.js' %}"></script>
+<script src="{% static 'js/angularjs/angular.min.js' %}"></script>
+{% block 'head_css' %}{% endblock %}
+{% block 'head_js' %}{% endblock %}
+
+</head>
+<body>
+{% block 'header' %}{% endblock %}
+<div class="container">
+{% block content %}
+content goes here ...
+{% endblock %}
+</div>
+{% block 'footer' %}{% endblock %}
+
+{% comment %}
+    bootstrap.js - needs jquery.js
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
+    <!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+    <script src="js/respond.js"></script>
+{% endcomment %}
+
+{% block 'footer_css' %}{% endblock %}
+{% block 'footer_js' %}{% endblock %}
+</body>
+</html>

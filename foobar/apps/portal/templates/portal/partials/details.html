@@ -1,0 +1,32 @@
+<script>
+var detailsCtrl = function($scope, $log) {
+    $scope.title = "default details page";
+    $scope.msgout = "";
+    $scope.debugout = function() {
+        
+        $scope.msgout = $scope.msgout ? "" : "ng-click: " + $scope.title;
+    }
+}
+</script>
+
+<div ng-controller="detailsCtrl" class="ng-cloak">
+    <div class="row">
+        <div class="col-lg-8 col-offset-1">
+            <h4>django whoami: {{whoami}}</h4>
+            
+            <p>a django template mixed with angularjs and with its own angular controller</p>   
+            {% verbatim %}
+            {{title}}
+            <span class="badge">{{name}}</span>
+            <button class="btn btn-primary" ng-click="debugout()">toggle</button>
+            <strong><span ng-show="msgout" class="glyphicon glyphicon-minus-sign">: </span>{{msgout}}</strong>
+            <p><code>django template: foobar/www/templates/www/details.html</code></p>            
+            {% endverbatim %}
+        </div>
+        
+        <p class="text-info">Similar idea from "https://groups.google.com/forum/#!topic/angular/H4haaMePJU0" - loading partial with controller to break
+        large app into small, manageable and functionally independent chunks!</p>
+        
+    </div>
+    
+</div>

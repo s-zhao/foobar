@@ -1,0 +1,12 @@
+
+.container {
+    width: 1000px;
+    border: 0px dotted silver;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    padding: 0.5em;
+}
+
+.indent-small {
+    text-indent: 2em;
+}
