@@ -4,11 +4,18 @@ import os, json
 from django.http import HttpResponse
 from django.shortcuts import render_to_response 
 
+#
+# need RequestContext to push user ... etc to template
+#
+# https://docs.djangoproject.com/en/1.2/ref/templates/api/#subclassing-context-requestcontext
+#
+from django.template import RequestContext
+
 from django.conf import settings
 
 def index(request, *args, **kwargs):
     print request.META['REMOTE_ADDR']
-    return render_to_response('portal/home/index.html')
+    return render_to_response('portal/home/index.html', {}, RequestContext(request) )
     
 def load_tpl(request, **kwargs):
     tpl = kwargs.get('tpl', 'story')

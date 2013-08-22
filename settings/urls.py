@@ -17,8 +17,8 @@ urlpatterns = patterns('',
 
 
 # Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+from django.contrib import admin
+admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
@@ -29,7 +29,13 @@ urlpatterns = patterns('',
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
-    # url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', include(admin.site.urls)),
+    
+    
+    #
+    # django auth http://devdoodles.wordpress.com/2009/02/16/user-authentication-with-django-registration/
+    # http://peyman-django.blogspot.com/2010/03/full-easy-authentication-using.html
+    ('^user/', include('django.contrib.auth.urls')),
     
     #
     # include takes the form - r'^', r'^path/', r'^path/path/', ..., without ending $
