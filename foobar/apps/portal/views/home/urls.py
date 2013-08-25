@@ -13,5 +13,4 @@ urlpatterns = patterns('foobar.apps.portal.views.home.views',
     url(r'^ng-template/books/$', 'ng_template_books', name='portal-home-ng-template-books'),
     url(r'^books/(?P<slug>[a-zA-Z0-9\-]+)/$', 'books_book', name='portal-home-books-book'),
     url(r'^ng-template/books/book/$', 'ng_template_books_book', name='portal-home-ng-template-books-book'),
-    
 )

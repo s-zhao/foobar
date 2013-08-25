@@ -13,6 +13,9 @@ from django.template import RequestContext
 
 from django.conf import settings
 
+def foobar(request, *args, **kwargs):
+    return render_to_response('foobar.html', {}, RequestContext(request) )
+    
 def index(request, *args, **kwargs):
     print request.META['REMOTE_ADDR']
     return render_to_response('portal/home/index.html', {}, RequestContext(request) )
