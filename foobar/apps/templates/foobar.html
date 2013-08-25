@@ -1,0 +1,99 @@
+<!DOCTYPE html>{% load staticfiles %}
+<html>
+<head>
+<title>Bootstrap 101 Template</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Bootstrap -->
+<link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet" media="screen">
+<link href="{% static 'bootstrap/css/bootstrap-theme.css' %}" rel="stylesheet" media="screen">
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
+<script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+<script src="{% static 'bootstrap/assets/js/html5shiv.js' %}"></script>
+<script src="{% static 'bootstrap/assets/js/respond.min.js' %}"></script>
+<![endif]-->
+
+<style>
+  body {
+      padding-top: 70px;
+  }
+  .container {
+      width: 980px;
+  }
+</style>
+
+<script>
+(function() {
+    angular.module('appMain', []).controller('mainCtrl', ['$scope', function($scope) {
+        $scope.brand = "Foobar";
+        $scope.title = "foo bar";
+    }]);
+
+    $(function() {
+        angular.bootstrap($('#header'), ['appMain']);
+    });
+})();
+</script>
+</head>
+<body>
+<header id="header" class="navbar navbar-default navbar-fixed-top">
+    <div class="container" ng-controller="mainCtrl">
+        <div class="navbar-header">
+            <a class="active navbar-brand" href="#" >{% verbatim %}{{ brand }}{% endverbatim %}</a>
+        </div>
+        <nav  role="navigation">
+            <ul class="nav navbar-nav">
+                <li>
+                <a href="#">Getting started</a>
+                </li>
+                <li>
+                <a href="#">CSS</a>
+                </li>
+                <li>
+                <a href="#">Components</a>
+                </li>
+                <li>
+                <a href="#">JavaScript</a>
+                </li>
+                <li>
+                <a href="#">Customize</a>
+                </li>
+            </ul>
+        </nav>
+        <ul class="nav navbar-nav pull-right">
+            <li style="display:none;"><a>please sign in </a></li>
+            <li><a class="btn" href="#">sign in</a></li>
+        </ul>
+    </div>
+</header>
+
+<div class="container" id="z-content-main">
+    <div class="row">
+        <div class="col-lg-12">
+            {% block content %}
+                <h3>content data goes here ..</h3>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                </p>
+            {% endblock %}
+        </div>
+    </div>
+</div>
+  
+<footer>
+    <hr>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                {% block footer %}
+                    <p>Copyright &copy; 2013</p>
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
