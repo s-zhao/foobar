@@ -1,0 +1,16 @@
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h4>django url include()</h4>
+    </div>
+    <blockquote>
+        Whenever Django encounters include() (django.conf.urls.include()), it chops off whatever part of the URL matched up to that point and sends the remaining string to the included URLconf for further processing.
+        <small><cite title="url include">url include()</cite></small>
+    </blockquote>
+    
+    <p>To mount included onto root /, do:</p>
+    <div class="indent-small">
+    <code>
+        <span>url(r'^', include(...))</span>
+    </code>
+    </div>    
+</div>

@@ -1,0 +1,250 @@
+{% extends 'portal/base.html' %}
+{% block content %}
+<!-- http://deansofer.com/posts/view/14/AngularJs-Tips-and-Tricks-UPDATED#setModel -->
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h4>django url include()</h4>
+    </div>
+    <blockquote>
+        Whenever Django encounters include() (django.conf.urls.include()), it chops off whatever part of the URL matched up to that point and sends the remaining string to the included URLconf for further processing.
+        <small><cite title="url include">url include()</cite></small>
+    </blockquote>
+    
+    <p>To mount included onto root /, do:</p>
+    <div class="indent-small">
+    <code>
+        <span>url(r'^', include(...))</span>
+    </code>
+    </div>    
+</div>
+
+
+<div class="panel panel-danger">
+    <div class="panel-heading">
+        <h4>foo bar's url naming convention and template structure</h4>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <h5>give url a unique slug alike name following pattern: `project-name`-`app-name`-... .</h5>
+            Example: 
+            <code>foobar-www-index</code>, <code>foobar-foo-index</code>, <code>foobar-foo-contact-details</code><br><br>
+            
+            If project will never be integrated with other projects, take out the `project-name`.<br><br>
+            The name of the URLs seem pretty long. We do need to know URLs in order to properly 
+            setup site links and we definitely don't want to get links wrong in reversing.<br><br>
+        </li>
+        <li class="list-group-item">
+            <h5>place application module specific templates into a sub-dir, with app module name as its dir name</h5>
+        </li>
+    </ul>
+    So it's simple, url can be easily reversed in both python scripts and django templates, and presentation can be further customized.
+</div>
+
+<script>
+var appDemoNgView = angular.module('appDemoNgView', []);
+appDemoNgView.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+    $routeProvider.when('/books', {
+        templateUrl: '/ng-template/books',
+        controller: demoBooksCtrl,
+    });
+    $routeProvider.when('/books/:slug', {
+        templateUrl: '/ng-template/books/book',
+        controller: demoBookCtrl
+    });
+
+    $locationProvider.html5Mode(true);   
+}]);
+
+/**
+ * this is how auto-scroll to top is disabled
+ *
+ */
+appDemoNgView.value('$anchorScroll', angular.noop);
+
+var demoBooksMainCtrl = ['$scope', '$route', '$routeParams', '$location', '$log', function($scope,$route,$routeParams,$location, $log) {
+    $scope.route = $route;
+    $scope.routeParams = $routeParams;
+    $scope.location = $location;    
+}];
+var demoBooksCtrl = ['$scope', '$route', '$routeParams', '$location', '$http', '$log', function($scope,$route,$routeParams,$location, $http, $log) {
+    $log.info('@demoBooksCtrl $location.path() :=> '+$location.path());
+    $log.info('@demoBooksCtrl $route.current.templateUrl :=> '+($route.current ? $route.current.templateUrl:""));
+    $log.info('@demoBooksCtrl $routeParams :=> '+$routeParams);
+    
+    $scope.books = [];
+    
+    $http.get('/books').
+    success(function(data, status, headers, config) {
+        $scope.books = data;
+    }).
+    error(function(data, status, headers, config) {
+        $log.error(data);
+    });
+}];
+var demoBookCtrl = ['$scope', '$route', '$routeParams', '$location', '$http', '$log', function($scope,$route,$routeParams,$location, $http, $log) {    
+    $scope.book = null;
+    
+    $http.get('/books/'+$routeParams.slug).
+    success(function(data, status, headers, config) {
+        $scope.book = data;
+    }).
+    error(function(data, status, headers, config) {
+        $log.error(data);
+    });
+}];
+$(document).ready(function() {
+    angular.bootstrap($('#appDemoNgView'), ['appDemoNgView']);
+});
+</script>
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h4>ng view</h4>
+    </div>
+    <blockquote>
+        So far don't see strong reasons to use ng-view. 
+        Also, ng-route seems messing up browser location, and
+        introduces additional problems.
+    </blockquote>
+    <div id="appDemoNgView">
+        <div>
+            <a ng-href="/books">books</a> | 
+            <a ng-href="/books/practical-djanog">Django</a>
+        </div>
+        <div ng-controller="demoBooksMainCtrl">
+            <hr>
+            <div ng-view></div>
+            <hr>
+            <p>demoBooksMainCtrl $location.path() :=> {% verbatim %} {{location.path()}}{% endverbatim %}</p>   
+            <p>demoBooksMainCtrl $routeParams :=> {% verbatim %} {{routeParams}}{% endverbatim %}</p> 
+        </div>
+
+    </div>
+</div>
+    
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h4>todo</h4>
+    </div>
+<!--
+foobar
+    foobar
+        * any-shared.py
+        * any-core.py
+        * any-common.py
+        * anything directly belonging to "foobar"
+        *        
+        utils
+            - foobar helper functions
+            
+        libs
+            - 
+            -  
+            
+        models
+            * db model, data validation, the nature of the model / pristine /blueprint / single source of truth about the db ... *
+            - sys
+            - foo
+                models.py
+                validators.py
+                tests.py
+                
+                defining the model and its validation rules
+                    - Abstract base - fields common to tables (also good for consistent validation against
+                        a kind of fields)
+                    - Multi-table inheritance - extension table/OneToOne relation
+                    
+            - bar                
+            - www - for db-backed managing site configuration and customization ...
+            
+        api
+            auth.py - authentication api
+            
+            proxies 
+                ** return pre-filtered data / pristine / db relation reserved **
+                foo
+                    api.py - proxies and queries
+                    django proxy technique ...
+                        Contact:
+                            Create Rule                        
+                            Update Rule
+                            Field Levl Access Rule
+                                - name/city -> public
+                                - details -> owner or ...
+                                
+                                SSN/DOB/Email/Phone/Age:
+                                    Read Rule
+                                    Update Rule
+                                
+                bar
+                    -
+                barfoo
+                    - cross model stuff
+                    
+            apps
+                ** role based record and field access rules **
+                filters - given appname/appcontext/loggedinuser, authorize and allow read access to records an record fields
+                permission - given appname/appcontext/loggedinuser,  authorize CREATE | UPDATE | DELETE operations on records and record fields if CREATE or UPDATE
+                 
+                ** those rules should be pluggable/droppable imp_import(mod) **/
+                ** by default: subject rule check, and default ruleset is 'public', optionally, bypass rule check if internal call **/
+                ** organize rule set by: model-object and interfaces **/
+                -
+            
+                pulbic
+                    get_redord
+                    query_db
+                    update record(s)
+                    ...
+                superadmin
+                client
+                vendor
+                ...
+                
+        apps
+            * portal applications *
+            
+            public
+                - static
+                - templates
+                - views
+                - login.py
+                - logout.py
+                - urls.py
+                
+            superadmin
+            client
+            vendor
+            partner
+            ...
+            
+    settings
+        - dev.py
+        - stage.py
+        - prod.py
+        - urls.py ** applications (aka urls) from apps directory **/
+        - wsgi.py
+        
+    requirements
+        - requirement
+        - dev-requirement
+        - prod-requirement
+        - stage-requirement
+        
+    docs
+        -
+        -
+        
+    manage.py
+    
+    
+django
+    - model abstract
+    - model inheritance
+    - model proxy
+    -...
+-->    
+</div>
+
+
+{% endblock %}    

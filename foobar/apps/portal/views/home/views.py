@@ -2,7 +2,7 @@
 import os, json
 
 from django.http import HttpResponse
-from django.shortcuts import render_to_response 
+from django.shortcuts import render, render_to_response 
 
 #
 # need RequestContext to push user ... etc to template
@@ -13,12 +13,31 @@ from django.template import RequestContext
 
 from django.conf import settings
 
-def foobar(request, *args, **kwargs):
-    return render_to_response('foobar.html', {}, RequestContext(request) )
     
 def index(request, *args, **kwargs):
     print request.META['REMOTE_ADDR']
     return render_to_response('portal/home/index.html', {}, RequestContext(request) )
+
+def snippets_angular(request, *args, **kwargs):
+    snippet = kwargs.get('snippet', 'snippets')
+    tpl = "portal/home/snippets/angular/%s.html" % snippet
+    return render(request, tpl) 
+
+def snippets_django(request, *args, **kwargs):
+    snippet = kwargs.get('snippet', 'snippets')
+    tpl = "portal/home/snippets/django/%s.html" % snippet
+    return render(request, tpl)     
+    
+def get_angular_page(request, *args, **kwargs):
+    page = kwargs.get('page', 'page-modal-dialog')
+    page_tpl = "portal/home/snippets/angular/%s.html" % page
+    return render(request, page_tpl)
+    
+#
+# to be re-factored
+#    
+def snippets(request, *args, **kwargs):
+    return render_to_response('portal/home/snippets.html', {}, RequestContext(request) )
     
 def load_tpl(request, **kwargs):
     tpl = kwargs.get('tpl', 'story')

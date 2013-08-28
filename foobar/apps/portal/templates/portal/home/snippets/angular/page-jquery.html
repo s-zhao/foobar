@@ -1,0 +1,173 @@
+{% extends 'portal/base.html' %}
+{% block content %}
+
+{% verbatim %}
+<div class="panel panel-default" id="appJQueryMixedInFOO" ng-controller="jQueryMixedInFooCtrl">
+    <div class="panel-heading">
+        <div class="panel-title"><h3>{{ title }}</h3></div>
+    </div>
+    <div class="panel-body">
+        foo ... {{ about }}<br>
+        <input type="text" ng-model="foo_text">
+        <span class="text-info">{{ foo_text }}</span>
+    </div>
+</div>
+<script>
+(function() {
+    angular.module('appJQueryMixedInFOO', []).
+    controller('jQueryMixedInFooCtrl', ['$scope', '$log', '$injector', function($scope, $log, $injector) {
+        $scope.name = "appJQueryMixedIn-FOO";
+        
+        $scope.title = "foo: pure ng";
+        $scope.about = "it's foo";
+        
+        $injector.invoke(foobar.mixins.DigestWatcher, this, {$scope: $scope, $log: $log});
+    }]);
+    $(document).ready(function() {
+        angular.bootstrap($('#appJQueryMixedInFOO'), ['appJQueryMixedInFOO']);
+    });
+}());
+</script>
+
+<div class="panel panel-default" id="appJQueryMixedInBAR" ng-controller="jQueryMixedInBarCtrl">
+    <div class="panel-heading">
+        <div class="panel-title"><h3>{{ title }}</h3></div>
+    </div>
+    <div class="panel-body">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <div class="panel-title"><h4>ng only</h4></div>
+            </div>
+            <div class="panel-body">
+                bar ... <span class="text-danger">{{ about }}</span><br>        
+                <input type="text" ng-model="bar_text"> <span class="text-warning">{{ bar_text }}</span>            
+            </div>        
+        </div>
+                
+        <div class="well well-info">
+            <h4>ng+jQuery+bootstrap - bootstrap modal dialog with ng context</h4>
+            <a class="btn btn-default" ng-click="calculate()">calculate</a>: <span class="text-danger">{{ calculated }}</span>
+            <hr>
+            <p>note that launching/hidding dialog do not cause ng digest!</p>
+            <a class="btn btn-primary btn-lg" id="launch-modal2">Launch demo modal</a>
+            
+            <div class="modal fade" id="myModal2">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">{{ dialogTitle }}</h4>
+                  </div>
+                  <div class="modal-body">
+                    <textarea ng-model="user_input" cols="32" rows="4"></textarea>
+                    <p class="text-success">{{ user_input }}</p>                    
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="modal-save-changes2">Save changes</button>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->        
+            <script>
+                $(document).ready(function() {
+                    $('#launch-modal2').click(function() {
+                        $('#myModal2').modal({
+                            backdrop: false,
+                            keyboard: false,
+                            show: true
+                        });
+                    });
+                    $('#modal-save-changes2').click(function() {
+                        $('#myModal2').modal('hide');
+                    });
+                });
+
+            </script>
+            
+            <hr>
+            <div class="well">
+                <strong>user-input from dialog:</strong> <span class="text-danger">{{user_input}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endverbatim %}
+
+<script>
+(function() {
+    angular.module('appJQueryMixedInBAR', []).
+    controller('jQueryMixedInBarCtrl', ['$scope', '$log', '$injector', function($scope, $log, $injector) {
+        $scope.name = "appJQueryMixedIn-BAR";
+        
+        $scope.title = "bar: ng + jQuery";
+        $scope.about = "bar is here";
+        
+        $scope.dialogTitle = "bootstrap dialog";
+        
+        $scope.calculated = "";
+        
+        $scope.calculate = function() {
+           $scope.calculated=$scope.bar_text+ ' cool!';
+        }
+        
+        $injector.invoke(foobar.mixins.DigestWatcher, this, {$scope: $scope, $log: $log});
+    }]);   
+
+    $(document).ready(function() {
+        angular.bootstrap($('#appJQueryMixedInBAR'), ['appJQueryMixedInBAR']);
+    });
+}());
+</script>
+
+<hr>
+<blockquote>
+<strong>DOM Manipulation</strong><br>
+Stop trying to use jQuery to modify the DOM in controllers. Really. That includes adding elements, removing elements, retrieving their contents, showing and hiding them. Use built-in directives, or write your own where necessary, to do your DOM manipulation. See below about duplicating functionality.
+
+If you're struggling to break the habit, consider removing jQuery from your app. Really. Angular has the $http service and powerful directives that make it almost always unnecessary. Angular's bundled jQLite has a handful of the features most commonly used in writing Angular directives, especially binding to events.
+<br>
+<small>From: <cite title="angularjs FAQ">http://docs.angularjs.org/misc/faq</cite></small>
+</blockquote>
+
+<blockquote>
+<strong>Angular Execution Context vs Angular Digest</strong><br>
+Angular modifies the normal JavaScript flow by providing its own event processing loop. This splits the JavaScript into classical and Angular execution context. Only operations which are applied in Angular execution context will benefit from Angular data-binding, exception handling, property watching, etc...
+
+<br>
+<small> From : <cite title="angular execution context">http://docs.angularjs.org/guide/concepts</cite></small>
+</blockquote>
+
+<blockquote>
+<strong>The separation of the controller and the view is important because:</strong>
+<ul>
+    <li>The controller is written in JavaScript. JavaScript is imperative. Imperative is a good fit for specifying application behavior. 
+        <span class="text-danger">The controller should not contain any rendering information (DOM references or HTML fragments)</span>.</li>
+    <li>The view template is written in HTML. HTML is declarative. Declarative is a good fit for specifying UI. 
+        <span class="text-danger">The View should not contain any behavior</span>.</li>
+    <li>Since the controller is unaware of the view, there could be many views for the same controller. This is important for re-skinning, device specific views (i.e. mobile vs desktop), and testability.</li>
+</ul>
+<small From: <cite title="angular concepts">http://docs.angularjs.org/guide/concepts</cite></small>
+</blockquote>
+
+<hr>
+<h3>Summary</h3>
+<ul>
+    <li>Angular made its valid points on the separation of the controller and the veiw.</li>
+    <li>From above experiments, as long as no DOM manipulation inside controller, ng just ignores whatever non-ng JS does on DOM, and 
+        manipulating DOM via jQuery/bootstrap.js seem having no effects on ng digesting (ng only cares those entering angular execution context, 
+        that is, the $watchers and $listeners ...).
+    </li>
+    <li>
+        Considering angular-ui for boostrap always falls behind bootstrap.js, just use bootstrap.js, 
+        forget the angular scaring tactics!
+    </li>
+    <li>
+        Really a crazy ng directive fun? well ng directive is a double edged sword. Can be good, can be evil. Think about how
+        many times one thought one devloped a great widget, component, or an object class, and turned out 
+        to be disastrous when minor changes needed in the future!
+    </li>
+</ul>
+
+
+{% endblock %}    

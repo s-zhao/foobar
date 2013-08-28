@@ -1,0 +1,55 @@
+{% extends 'portal/base.html' %}
+{% block content %}
+
+{% comment %}
+javascript code highlighter.
+{% endcomment %}
+<link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/default.min.css">
+<script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
+<script>//hljs.initHighlightingOnLoad();</script>
+
+<script>
+(function() {
+    var appDjangoSnippets = angular.module('appDjangoSnippets', []);
+    appDjangoSnippets.controller('djangoSnippetsCtrl', ['$scope', '$log', '$http', '$injector', function($scope, $log, $http, $injector) {
+        $scope.appName = "django tricks and snippets";
+        $scope.snippets = [
+            {name: 'url include', slug: 'url-include'},
+        ];
+        
+        $scope.states = {};
+        $scope.states.snippet = $scope.snippets[0]; 
+         
+        $scope.tpl = function() {
+            return "{% url 'portal-home-snippets-django-snippet' '-.-slug-.-' %}".replace('-.-slug-.-', $scope.states.snippet.slug);
+        }
+        
+        $scope.onIncludedTemplateLoaded = function() {
+            $log.info('template loaded');
+        }
+                
+        $injector.invoke(foobar.mixins.DigestWatcher, this, {$scope: $scope, $log: $log});
+    }]);
+   $(document).ready(function() {
+        angular.bootstrap($('#appDjangoSnippets'), ['appDjangoSnippets']);
+   });
+})();
+</script>
+{% verbatim %}
+<div class="row" id="appDjangoSnippets" ng-controller="djangoSnippetsCtrl">
+    <div class="col-lg-2" >        
+        <ul class="nav nav-pills nav-stacked">
+            <li ng-class="{active: states.snippet==snippet}" ng-repeat="snippet in snippets"><a href="#" ng-click="states.snippet=snippet">{{ snippet.name }}</a></li>
+        </ul>       
+    </div>
+    
+    <div class="col-lg-10">
+        <p><span class="label label-info">{{ tpl() }}</span></p>
+        <div ng-include src="tpl()" onload="onIncludedTemplateLoaded()">
+        </div>        
+    </div>
+</div>
+
+{% endverbatim %}
+
+{% endblock %}    

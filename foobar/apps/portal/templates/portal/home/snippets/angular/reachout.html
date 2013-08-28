@@ -1,0 +1,57 @@
+{% verbatim %}
+<div class="row">
+    <div class="col-lg-6" id="appFoo" ng-controller="fooCtrl">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    {{ title }}
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="well">{{ description }}</div>
+                <p>instead of making a whole page to be one ng app, how about
+                   break a page into chunks and having multiple ng applications?
+                </p>
+            </div>
+        </div>    
+    </div>
+    
+    <div class="col-lg-6" id="appBar" ng-controller="barCtrl">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    {{ title }}
+                </div>
+            </div>
+            <div class="panel-body">
+                {{ description }}
+            </div>
+        </div>        
+    </div>    
+</div>
+{% endverbatim %}
+
+<script>
+angular.module('appFoo', []).
+controller('fooCtrl', ['$scope', '$log', '$injector', function($scope, $log, $injector) {
+    $scope.name = "appFoo-fooCtrl";
+    $scope.title = "appFoo - fooCtrl";
+    $scope.description = "a ng fooApp with controller named 'fooCtrl'";
+    
+    $injector.invoke(foobar.mixins.DigestWatcher, this, {$scope: $scope, $log: $log});
+}]);
+
+angular.module('appBar', []).
+controller('barCtrl', ['$scope', '$log', '$injector', function($scope, $log, $injector) {
+    $scope.name = "appBar-barCtrl";
+    $scope.title = "appBar - barCtrl";
+    $scope.description = "a ng appBar with controller named 'barCtrl'";
+    
+    $injector.invoke(foobar.mixins.DigestWatcher, this, {$scope: $scope, $log: $log});
+}]);
+
+$(document).ready(function() {
+    angular.bootstrap($('#appFoo'), ['appFoo']);
+    angular.bootstrap($('#appBar'), ['appBar']);
+});
+</script>

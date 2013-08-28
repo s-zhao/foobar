@@ -1,0 +1,112 @@
+{% extends 'portal/base.html' %}
+{% block content %}
+
+{% comment %}
+javascript code highlighter.
+{% endcomment %}
+<link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/default.min.css">
+<script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
+<script>//hljs.initHighlightingOnLoad();</script>
+
+<script>
+(function() {
+    var appAngularSnippets = angular.module('appAngularSnippets', []);
+    appAngularSnippets.controller('angularSnippetsCtrl', ['$scope', '$log', '$http', '$injector', function($scope, $log, $http, $injector) {
+        $scope.appName = "ng snippets";
+        $scope.snippets = [
+            {name: 'ng bootstrap', slug: 'bootstrap'}, 
+            {name: 'ng include', slug: 'include'},
+            {name: 'Python Code', slug: 'pycode'},
+            {name: 'BS Modal Dialog', slug: 'bs-modal'},
+        ];
+        
+         
+        
+        /**
+         *  ng-repeat creates a new scope for each of the items to be created. To access the
+         *  attribute in the parent scope, one can do:
+         *      1) use $parent in ng-repeat: $parent.snippet (explicit)
+         *      2) use set/getSnippet(snippet) method
+         *      3) or define a object in parent scope, and set snippet as an attribute of the object:
+         *         (the winner i pikced)
+         *
+         *  you cannot simply setup an attribute in parent scope, and access it from within child scope
+         *  ng seems tempted to create a new variable in child scope instead of performing lookup
+         *
+         */
+        $scope.states = {};
+        $scope.states.snippet = $scope.snippets[0]; 
+         
+        $scope.tpl = function() {
+            return "{% url 'portal-home-snippets-angular-snippet' '-.-slug-.-' %}".replace('-.-slug-.-', $scope.states.snippet.slug);
+        }
+        
+        $scope.onIncludedTemplateLoaded = function() {
+            $log.info('template loaded');
+        }
+        
+        $scope.reachOut = function() {
+            var url = "{% url 'portal-home-snippets-angular-snippet' 'reachout' %}";
+            $http.get(url, {cache:false}).
+            success(function(data, status, headers, config) {
+                $('#reachout').html(data);
+            }).
+            error(function(data, status, headers, config) {
+                $('#reachout').html(data);
+            });            
+        }
+        
+        $scope.loadModalDialog = function() {
+            var url = "{% url 'portal-home-snippets-angular-snippet' 'app-modal-dialog' %}";
+            $http.get(url, {cache:false}).
+            success(function(data, status, headers, config) {
+                $('#reachout-app-modal-dialog').html(data);
+            }).
+            error(function(data, status, headers, config) {
+                $('#reachout-app-modal-dialog').html(data);
+            });                    
+        }
+        
+        $injector.invoke(foobar.mixins.DigestWatcher, this, {$scope: $scope, $log: $log});
+    }]);
+   $(document).ready(function() {
+        angular.bootstrap($('#appAngularSnippets'), ['appAngularSnippets']);
+   });
+})();
+</script>
+
+<div class="row" id="appAngularSnippets" ng-controller="angularSnippetsCtrl">
+    <div class="col-lg-2" >        
+        <ul class="nav nav-pills nav-stacked">
+            {% verbatim %}<li ng-class="{active: states.snippet==snippet}" ng-repeat="snippet in snippets"><a href="#" ng-click="states.snippet=snippet">{{ snippet.name }}</a></li>{% endverbatim %}
+
+            <li><a href="#" ng-click="reachOut()">Reach out</a></li>
+            <li><a href="#" ng-click="loadModalDialog()">Load Modal Dialog</a></li>
+            <li><a href="{% url 'portal-home-get-angular-page-page' 'page-modal-dialog' %}" target="_blank">modal dialog</a></li>
+        </ul>       
+    </div>
+    
+    {% verbatim %}
+    <div class="col-lg-10">
+        <p><span class="label label-info">{{ tpl() }}</span></p>
+        <div ng-include src="tpl()" onload="onIncludedTemplateLoaded()">
+        </div>        
+    </div>
+    {% endverbatim %}
+</div>
+
+<div id="reachout">
+</div>
+
+<hr>
+<div id="reachout-app-modal-dialog">
+</div>
+
+
+
+
+
+
+
+
+{% endblock %}    

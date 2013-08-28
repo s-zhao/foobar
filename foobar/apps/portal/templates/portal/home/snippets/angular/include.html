@@ -1,0 +1,11 @@
+<script>
+var includeExampleCtrl = ['$scope', function($scope) {
+    $scope.name = "ng-include";
+}];
+</script>
+{% verbatim %}
+<div class="well" ng-controller="includeExampleCtrl">
+    <h2>{{ appName }} / {{ name }} @ {{ tpl() }}</h2>
+    <p>partial, loaded via ng-include and having own controller.</p>
+</div>
+{% endverbatim %}

@@ -1,0 +1,72 @@
+
+{% verbatim %}
+<div id="appModalDialogFakeMain" ng-controller="modalDialogFakeMainCtrl">
+    <a class="btn btn-primary btn-sm" href="#" ng-click="launchModalDialog()">{{ title }}</a>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="appMyModalDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-controller="myModalDialogCtrl">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">{{ title }}</h4>
+      </div>
+      <div class="modal-body">
+        <p>bootstrap modal dialog with ng app/controller installed.</p>
+        <p>so this is an independent ng app</p>
+        <p>
+http://docs.angularjs.org/guide/concepts<br>
+<blockquote>
+The controller is written in JavaScript. JavaScript is imperative. Imperative is a good fit for specifying application behavior. The controller should not contain any rendering information (DOM references or HTML fragments).
+</blockquote>      
+http://www.grobmeier.de/twitter-bootstrap-modal-angular-js-29082012.html#.UhwBztJHQrU  
+
+<br>http://amitgharat.wordpress.com/2013/02/03/an-approach-to-use-jquery-plugins-with-angularjs/
+<br>9 thoughts on “An approach to use jQuery Plugins with AngularJS”
+<br>http://www.bennadel.com/blog/2448-Using-jQuery-Event-Delegation-In-AngularJS.htm
+
+
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" ng-click="doneModalDialog()">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{% endverbatim %}
+
+<script>
+angular.module('appModalDialogFakeMain', []).
+controller('modalDialogFakeMainCtrl', ['$scope', '$log', '$injector', function($scope, $log, $injector) {
+    $scope.name = "FAKE MAIN";
+    $scope.title = "launch modal dialog";
+    
+    $scope.launchModalDialog = function() {
+        $('#appMyModalDialog').modal({keyboard:false, backdrop: 'static', show:true});
+    }
+    
+    $injector.invoke(foobar.mixins.DigestWatcher, this, {$scope: $scope, $log: $log});
+    
+}]);
+
+angular.module('appModalDialog', []).
+controller('myModalDialogCtrl', ['$scope', '$log', '$injector', function($scope, $log, $injector) {
+  $scope.name = "MODAL-DIALOG";
+  
+  $scope.title = "BS Modal Dialog with its own ng-app/controller";
+  $scope.doneModalDialog = function() {
+    $('#appMyModalDialog').modal('hide');
+  }
+  
+  $injector.invoke(foobar.mixins.DigestWatcher, this, {$scope: $scope, $log: $log});
+}]);
+
+
+$(document).ready(function() {
+  angular.bootstrap($('#appModalDialogFakeMain'), ['appModalDialogFakeMain']);
+  angular.bootstrap($('#appMyModalDialog'), ['appModalDialog']);    
+});
+</script>

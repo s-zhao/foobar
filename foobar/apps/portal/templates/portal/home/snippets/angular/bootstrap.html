@@ -1,0 +1,18 @@
+<script>
+var appBootstrapExample = angular.module('appBootstrapExample', []);
+var bootstrapExampleCtrl = ['$scope', '$log', '$injector', function($scope, $log, $injector) {
+    $scope.name = "bootstrapExample";
+    
+    $injector.invoke(foobar.mixins.DigestWatcher, this, {$scope: $scope, $log: $log});
+}];
+$(document).ready(function() {
+    angular.bootstrap($('#appBootstrapExample'), ['appBootstrapExample']);
+});
+</script>
+{% verbatim %}
+<h2>Manually bootstrap a ng application</h2>
+
+<div id="appBootstrapExample" ng-controller="bootstrapExampleCtrl">
+    <h3>{{ name }}</h3>
+</div>
+{% endverbatim %}
